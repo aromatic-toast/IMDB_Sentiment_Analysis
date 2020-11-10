@@ -12,9 +12,6 @@ from bs4 import BeautifulSoup
 # tokenization
 import spacy
 
-# document modelling
-from gensim.models.doc2vec import Doc2Vec
-
 
 def remove_html(text):
     """
