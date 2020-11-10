@@ -133,3 +133,6 @@ dmypy.json
 
 # nohup log files
 nohup.out
+
+# Pycharm specific config
+*.idea
