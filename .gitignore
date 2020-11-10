@@ -130,3 +130,6 @@ dmypy.json
 
 # Doc2Vec model objects 
 *.model
+
+# nohup log files
+nohup.out
