@@ -171,6 +171,42 @@ def display_metrics(metrics):
 
     return metrics_df
 
+def get_most_similar_docs(tagged_docs, most_sim_docs):
+    """
+    Produces a dataframe of the text of most similar documents.
+
+    Parameters
+    ----------
+    tagged_docs (list) A list of gensim TaggedDocuments
+    most_sim_docs (list) The result of calling gensim docvecs.most_similar.
+
+    Returns
+    -------
+    pandas.core.frame.DataFrame
+        A df where each row is the text of the most similar docs.
+
+    """
+    # initialize a dictionary to hold most similar texts
+    # keyed by their index in the TaggedDocuments lists
+    most_similar_texts = {}
+
+    # get the texts of the most similar docs
+    for most_sim_doc in most_sim_docs:
+        # get the tagged doc index
+        index = most_sim_doc[0]
+
+        # convert the tokens from most similar into text
+        most_sim_text = " ".join(tagged_docs[index].words)
+
+        # append the text to the list
+        most_similar_texts[index] = most_sim_text
+
+    # convert the most similar texts into a dataframe
+    most_similar_df = pd.DataFrame(most_similar_texts, index=[1]).transpose().rename(columns={1: 'most_similar_texts'})
+    most_similar_df
+
+    return most_similar_df
+
 
 
 
