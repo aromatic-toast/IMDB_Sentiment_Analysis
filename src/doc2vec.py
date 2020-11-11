@@ -15,7 +15,7 @@ from gensim.models.doc2vec import Doc2Vec, TaggedDocument
 import multiprocessing
 
 # read in clean training text
-X_train = pd.read_csv("data/X_train_clean.csv").text
+X_train = pd.read_csv("data/train_clean.csv").text
 
 # tokenize the text into a list of lists
 print("Tokenizing training text...")
