@@ -4,10 +4,6 @@
 # this script performs all the text cleaning steps on each document
 # and writes out a new dataset where each row in the dataframe is cleaned text.
 
-# Note:
-# this IMDB kaggle dataset already came with the movie reviews split into train, validation and testing sets.
-# however, it makes more sense to train a doc2vec model on ALL reviews and then perform a train-test split on the
-# resulting extracted doc vector dataset.
 
 # load packages
 import sys
