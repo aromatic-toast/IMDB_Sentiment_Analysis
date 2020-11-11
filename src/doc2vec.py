@@ -56,7 +56,7 @@ model.train(documents=tagged_docs,
 
 # save the model
 print("Saving d2v model to disk...")
-model.save("results/d2v_X_train_clean.model")
+model.save("results/d2v_train_clean.model")
 
 
 
