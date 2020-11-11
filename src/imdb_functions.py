@@ -150,5 +150,27 @@ def tokenize(text):
 
     return docs
 
+def display_metrics(metrics):
+    """
+    Produce a table displaying the precision, recall, f1 score and count of reviews in each
+    class label.
+
+    Parameters
+    ----------
+    metrics (tuple) A tuple of classifier metrics obtained from precision_recall_fscore_support fxn.
+
+    Returns
+    -------
+    pandas.core.frame.DataFrame
+        A dataframe to display the precision, recall, f1 score and count of reviews for each class label.
+    """
+    scores_dict = {'neg_reviews': [metrics[0][0], metrics[1][0], metrics[2][0], metrics[3][0]],
+                   'pos_reivews': [metrics[0][1], metrics[1][1], metrics[2][1], metrics[3][1]]}
+
+    metrics_df = pd.DataFrame(scores_dict, index=['precision', 'recall', 'f1_score', 'count_of_reviews'])
+
+    return metrics_df
+
+
 
 
