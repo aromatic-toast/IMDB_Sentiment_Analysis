@@ -1,6 +1,10 @@
 # IMDB Sentiment Analysis
 A repository to explore the Doc2Vec algorithm on the IMDB dataset. 
 
+## Data Source 
+The dataset can be downloaded from Kaggle [here](https://www.kaggle.com/columbine/imdb-dataset-sentiment-analysis-in-csv-format).
+It comes already split into ***Train***, ***Validation*** and ***Test*** sets.
+
 ## Analysis Pipeline 
 
 ### 1 Clean Raw Text 
