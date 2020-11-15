@@ -12,7 +12,7 @@ from gensim.models.doc2vec import Doc2Vec
 
 
 # load d2v model
-model = Doc2Vec.load("results/d2v_X_train_clean.model")
+model = Doc2Vec.load("results/d2v_train_clean_v3.model")
 
 # extract the train set vectors
 print("extracting train set vectors...")
