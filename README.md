@@ -74,6 +74,8 @@ model produces a very large model object (344MB + 50MB)
 - window=10
 - dm_concat = 1
 
+
+
 **Version 3: (PV-DBOW)**
 
 For this model, only the paragraph vectors are trained without the word vectors. 
