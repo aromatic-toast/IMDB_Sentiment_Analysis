@@ -42,3 +42,47 @@ learned from the model.
 python src/feature_extraction.py
 ```
 
+# Doc2Vec Model Experimentation 
+The sentiment analysis task was carried using multiple `doc2vec` models. The parameters of the 
+different models is documented below. 
+
+** Version 1: (PV-DM)** 
+
+This model averages together the paragraph vector along with the 
+learned context window word vectors to perform the prediction task of predicting the 
+next word in the sequence. 
+
+- max_epochs = 100
+- vec_size = 100
+- min_count=2
+- alpha = 0.025
+- dm=1
+- window=10
+
+**Version 2: (PV-DM)**
+
+The only difference between this model and the one above is that instead of 
+averaging the paragraph vector and context word vectors together before the prediction
+task, it concatenates the paragraph vector and the window context word vectors together. 
+This model is supposed to improve performance due to the concatentation. However, this
+model produces a very large model object (344MB + 50MB)
+- max_epochs = 100
+- vec_size = 100
+- min_count=2
+- alpha = 0.025
+- dm=1
+- window=10
+- dm_concat = 1
+
+**Version 3: (PV-DBOW)**
+
+For this model, only the paragraph vectors are trained without the word vectors. 
+The network is trained to predict the words occurring in the context window, given
+the paragraph vector. 
+
+- max_epochs = 100
+- vec_size = 100
+- min_count=2
+- alpha = 0.025
+- dm=0
+- window=10
