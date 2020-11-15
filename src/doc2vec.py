@@ -1,5 +1,5 @@
 # Author: Lesley Miller
-# Date: 2020/11/11
+# Date: 2020/11/14
 
 # this script builds a doc2vec model for each document and writes out
 # a saved model object for later use
@@ -33,7 +33,7 @@ max_epochs = 100
 vec_size = 100
 min_count=2
 alpha = 0.025
-dm=1
+dm=0
 window=10
 
 # initialize the model
@@ -42,7 +42,7 @@ model = Doc2Vec(vector_size=vec_size,
                dm=dm,
                epochs=max_epochs,
                window=window,
-               workers=cores)
+               workers=cores,)
 
 # build the vocobulary
 print("Building model vocabulary...")
@@ -56,7 +56,7 @@ model.train(documents=tagged_docs,
 
 # save the model
 print("Saving d2v model to disk...")
-model.save("results/d2v_train_clean.model")
+model.save("results/d2v_train_clean_v3.model")
 
 
 
