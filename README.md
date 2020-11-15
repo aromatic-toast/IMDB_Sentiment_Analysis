@@ -46,7 +46,7 @@ python src/feature_extraction.py
 The sentiment analysis task was carried using multiple `doc2vec` models. The parameters of the 
 different models is documented below. 
 
-** Version 1: (PV-DM)** 
+**Version 1: (PV-DM)** 
 
 This model averages together the paragraph vector along with the 
 learned context window word vectors to perform the prediction task of predicting the 
