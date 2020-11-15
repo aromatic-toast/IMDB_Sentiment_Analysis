@@ -130,6 +130,7 @@ dmypy.json
 
 # Doc2Vec model objects 
 *.model
+d2v_train_clean_v2.model.trainables.syn1neg.npy
 
 # nohup log files
 nohup.out
