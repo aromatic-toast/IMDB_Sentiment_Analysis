@@ -141,3 +141,6 @@ nohup.out
 # ignore raw train data
 *Train.csv
 *Train.parquet
+
+# VS Code settings
+.vscode/
