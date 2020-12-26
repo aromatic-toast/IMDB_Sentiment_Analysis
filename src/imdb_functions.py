@@ -208,5 +208,14 @@ def get_most_similar_docs(tagged_docs, most_sim_docs):
     return most_similar_df
 
 
+def make_top_n(df, n, polarity):
+    plot = px.bar(df,
+                  x='word_count',
+                  y='words',
+                  labels={'words': 'Top ' + str(n) + ' Words', 'word_count': 'Word Count'},
+                  title='Top ' + str(n) + ' Most Frequent Words in ' + polarity + ' Reviews')
+    return plot
+
+
 
 
