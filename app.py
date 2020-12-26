@@ -170,17 +170,15 @@ server = app.server
 
 app.layout = html.Div(children=[navbar,
                                 # html.H3(children='Exploratory Text Analysis'),
-                                #tooltip,
-
-                                # App intro Text
-                                dbc.Col(dcc.Markdown(markdown_text1), width=4),
+                                intro_tooltip,
 
                                 # 3 main tabs
                                 dcc.Tabs([
                                     # tab to text documents
                                     dcc.Tab(id='tab1', label='Read Movie Reviews', children=[
                                         dbc.Row(html.Br()),
-                                        dbc.Row(dbc.Col([html.H6(markdown_text2)], width=4)),
+                                        tab1_tooltip,
+                                        # dbc.Row(dbc.Col([html.H6(markdown_text2)], width=4)),
                                         dbc.Row(html.Br()),
                                         dbc.Row(dbc.Col([
                                             html.Label("Enter an integer below:")
@@ -232,7 +230,7 @@ app.layout = html.Div(children=[navbar,
                                     # tab to contain a map
                                     dcc.Tab(label='Wordcloud', children=[
                                         dbc.Row(html.Br()),
-                                        dbc.Row(dbc.Col(html.H5("Some instructions on how to use the map. "))),
+                                        # dbc.Row(dbc.Col(html.H5("Some instructions on how to use the map. "))),
                                         dbc.Row(html.Br()),
                                         dbc.Row(dbc.Col([
                                             html.Img(id='wordcloud',
@@ -300,6 +298,7 @@ def get_neg_review(index):
             neg_rev[index]
         ))
     return tab2_content
+
 
 if __name__ == '__main__':
     app.run_server(debug=True)
