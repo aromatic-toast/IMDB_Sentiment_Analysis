@@ -1,0 +1,21 @@
+# ignore uncessary data files
+data/Train.csv
+data/Test.csv
+data/Valid.csv
+data/archive.zip
+data/test_clean.csv
+data/test_d2v.csv
+data/train_clean.csv
+data/train_d2v.csv
+data/valid_clean.csv
+data/valid_d2v.csv
+
+# ignore python notebooks
+*.ipynb
+
+
+*.html
+
+# ignore results folder
+results/
+
