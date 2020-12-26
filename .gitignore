@@ -137,3 +137,7 @@ nohup.out
 
 # Pycharm specific config
 *.idea
+
+# ignore raw train data
+*Train.csv
+*Train.parquet
