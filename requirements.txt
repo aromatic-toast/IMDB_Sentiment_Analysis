@@ -45,6 +45,7 @@ geopandas==0.8.1
 geotable==0.4.2.1
 gitdb2==2.0.6
 GitPython==2.1.15
+gunicorn==20.0.4
 hdbscan==0.8.26
 idna==2.10
 iniconfig==1.1.1
