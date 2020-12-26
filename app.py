@@ -1,7 +1,7 @@
 import sys
 sys.path.append("/Users/lesleymi/data_science_portfolio/IMDB_Sentiment_Analysis/src")
 # custom functions
-import imdb_functions as imdb
+#import imdb_functions as imdb
 
 # data wrangling
 import pandas as pd
@@ -23,6 +23,15 @@ import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output
 import base64
 
+# functions
+def make_top_n(df, n, polarity):
+    plot = px.bar(df,
+                  x='word_count',
+                  y='words',
+                  labels={'words': 'Top ' + str(n) + ' Words', 'word_count': 'Word Count'},
+                  title='Top ' + str(n) + ' Most Frequent Words in ' + polarity + ' Reviews')
+    return plot
+
 # load data
 train = pd.read_parquet("data/Train.parquet")
 # replace 0/1s with human readable labels
@@ -32,11 +41,6 @@ train = train.replace({'label':{0:'negative',
 train_clean = pd.read_parquet("data/train_clean.parquet")
 train_clean = train_clean.replace({'label':{0:'negative',
                                 1: 'positive'}})
-
-
-
-
-
 
 
 # get a negative review
@@ -250,7 +254,7 @@ def get_top_overall_words(n):
     # filter vocabulary to top n words
     filtered_df = all_words.head(n)
     # make the plot
-    plot = imdb.make_top_n(filtered_df, n, 'All')
+    plot = make_top_n(filtered_df, n, 'All')
     return plot
 
 
@@ -261,7 +265,7 @@ def get_top_pos_words(n):
     # filter vocabulary to top n words
     filtered_df = pos_words.head(n)
     # make the plot
-    plot = imdb.make_top_n(filtered_df, n, 'Positive')
+    plot = make_top_n(filtered_df, n, 'Positive')
     return plot
 
 
@@ -272,7 +276,7 @@ def get_top_neg_words(n):
     # filter vocabulary to top n words
     filtered_df = neg_words.head(n)
     # make the plot
-    plot = imdb.make_top_n(filtered_df, n, 'Negative')
+    plot = make_top_n(filtered_df, n, 'Negative')
     return plot
 
 
