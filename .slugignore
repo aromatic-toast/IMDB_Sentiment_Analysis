@@ -13,7 +13,6 @@ data/valid_d2v.csv
 # ignore python notebooks
 *.ipynb
 
-
 *.html
 
 # ignore results folder
