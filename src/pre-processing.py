@@ -60,9 +60,9 @@ test_clean_df = pd.DataFrame(test_clean_dict)
 
 
 print("writing out cleaned train, validation & test sets to csv")
-train_clean_df.to_csv('data/train_clean.csv')
-valid_clean_df.to_csv('data/valid_clean.csv')
-test_clean_df.to_csv('data/test_clean.csv')
+train_clean_df.to_csv('data/train_clean.csv', index=False)
+valid_clean_df.to_csv('data/valid_clean.csv', index=False)
+test_clean_df.to_csv('data/test_clean.csv', index=False)
 
 
 
