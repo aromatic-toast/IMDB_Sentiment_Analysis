@@ -144,3 +144,10 @@ nohup.out
 
 # VS Code settings
 .vscode/
+
+
+# for app deployment
+venv
+*.pyc
+.DS_Store
+.env
