@@ -7,9 +7,6 @@ sys.path.append("/Users/lesleymi/data_science_portfolio/IMDB_Sentiment_Analysis/
 import pandas as pd
 import numpy as np
 
-# nlp
-from nltk.probability import FreqDist
-
 # viz
 import plotly.express as px
 import matplotlib.pyplot as plt
@@ -67,7 +64,7 @@ df = (train.groupby(by='label')
           .reset_index()
           .rename(columns={'text':'count'}))
 
-# plot he count of pos/neg labels
+# plot the count of pos/neg labels
 plot1 = px.bar(df,
        x='label',
        y='count',
@@ -75,7 +72,12 @@ plot1 = px.bar(df,
        title='Count of Positive and Negative Reviews',
        labels={'label': 'Movie Review Sentiment',
                'count': 'Count of Reviews'})
-plot1.show('png')
+
+# get number of tokens in each document
+clean_doc_length = train_clean.tokenized_docs.apply(func=len).to_frame(name='num_tokens')
+
+# add document length to train_clean
+train_clean['num_tokens'] = clean_doc_length
 
 # visualize document length by sentiment label
 plot4 = px.histogram(train_clean,
@@ -83,7 +85,6 @@ plot4 = px.histogram(train_clean,
                      color='label',
                      labels={'num_tokens':'Number of Tokens'},
                      title='Distribution of Cleaned Movie Review Length')
-plot4.show('png')
 
 
 
