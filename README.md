@@ -5,8 +5,8 @@ A repository to explore the Doc2Vec algorithm on the IMDB dataset.
 The dataset can be downloaded from Kaggle [here](https://www.kaggle.com/columbine/imdb-dataset-sentiment-analysis-in-csv-format).
 It comes already split into ***Train***, ***Validation*** and ***Test*** sets.
 
-## Exploratory Data Analysis Dashboard
-A visualization dashboard to explore the dataset can be found [here](https://imdb-text-analysis.herokuapp.com/). 
+## Text Visualization Dashboard
+A dashboard to explore the dataset can be found [here](https://imdb-text-analysis.herokuapp.com/). 
 
 ## Analysis Pipeline 
 
