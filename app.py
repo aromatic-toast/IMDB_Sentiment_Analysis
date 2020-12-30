@@ -1,24 +1,18 @@
-import sys
-sys.path.append("/Users/lesleymi/data_science_portfolio/IMDB_Sentiment_Analysis/src")
-# custom functions
-#import imdb_functions as imdb
-
 # data wrangling
 import pandas as pd
 import numpy as np
 
 # viz
 import plotly.express as px
-import matplotlib.pyplot as plt
-from wordcloud import WordCloud
 
 # Plotly Dash
 from jupyter_dash import JupyterDash
 import dash_core_components as dcc
 import dash_html_components as html
 import dash_bootstrap_components as dbc
-from dash.dependencies import Input, Output
+from dash.dependencies import Input, Output, State
 import base64
+
 
 # functions
 def make_top_n(df, n, polarity):
@@ -29,16 +23,17 @@ def make_top_n(df, n, polarity):
                   title='Top ' + str(n) + ' Most Frequent Words in ' + polarity + ' Reviews')
     return plot
 
+
 # load data
 train = pd.read_parquet("data/Train_subset.parquet")
+
 # replace 0/1s with human readable labels
-train = train.replace({'label':{0:'negative',
-                                1: 'positive'}})
+train = train.replace({'label': {0: 'negative',
+                                 1: 'positive'}})
 # replace 0/1s with human readable labels
 train_clean = pd.read_parquet("data/train_clean.parquet")
-train_clean = train_clean.replace({'label':{0:'negative',
-                                1: 'positive'}})
-
+train_clean = train_clean.replace({'label': {0: 'negative',
+                                             1: 'positive'}})
 
 # get a negative review
 neg_rev = train.query('label == "negative"').text.values
@@ -57,21 +52,20 @@ train_clean_neg = train_clean.query('label == "negative"').tokenized_docs.to_lis
 positive_bow = np.concatenate(train_clean_pos)
 negative_bow = np.concatenate(train_clean_neg)
 
-
 # how many positive/negative reviews are there?
 df = (train_clean.groupby(by='label')
-          .count()
-          .reset_index()
-          .rename(columns={'text':'count'}))
+      .count()
+      .reset_index()
+      .rename(columns={'text': 'count'}))
 
 # plot the count of pos/neg labels
 plot1 = px.bar(df,
-       x='label',
-       y='count',
-       color='label',
-       title='Count of Positive and Negative Reviews',
-       labels={'label': 'Movie Review Sentiment',
-               'count': 'Count of Reviews'})
+               x='label',
+               y='count',
+               color='label',
+               title='Count of Positive and Negative Reviews',
+               labels={'label': 'Movie Review Sentiment',
+                       'count': 'Count of Reviews'})
 
 # get number of tokens in each document
 clean_doc_length = train_clean.tokenized_docs.apply(func=len).to_frame(name='num_tokens')
@@ -83,34 +77,20 @@ train_clean['num_tokens'] = clean_doc_length
 plot4 = px.histogram(train_clean,
                      x='num_tokens',
                      color='label',
-                     labels={'num_tokens':'Number of Tokens'},
+                     labels={'num_tokens': 'Number of Tokens'},
                      title='Distribution of Cleaned Movie Review Length')
 
-
-
-
-## intro text
-
-markdown_text1 = """
+# intro text
+app_intro = """
 This app displays visualizations of the IMDB movie review dataset found [here on Kaggle](https://www.kaggle.com/columbine/imdb-dataset-sentiment-analysis-in-csv-format).
 All the code for this analysis can be found on GitHub [here](https://github.com/aromatic-toast/IMDB_Sentiment_Analysis). The data displayed here is for 40,000 movie reviews
 labeled as either positive or negative reviews. 
 """
 
 markdown_text2 = """
-Use the tabs to navigate to an example of a positive or negative movie review. 
-Click the arrows inside the box up and down to browse through different reviews or enter a number
-directly between 0 and 19,000. 
+Explore the content of positive and negative movie reviews by 
+selecting from the dropdown menu. 
 """
-# add positive and negative review examples to a table
-table_header = [html.Thead(
-    html.Tr([html.Th("Positive Review"), html.Th('Negative Review')])
-)]
-row1 = html.Tr([html.Td(pos_rev), html.Td(neg_rev)])
-table_body = [html.Tbody([row1])]
-table = dbc.Table(table_header + table_body,
-                  bordered=True,
-                  striped=True)
 
 # get the vocabulary and their frequencies
 all_words = (pd.DataFrame(clean_docs_bow, columns=['word_count'])
@@ -146,7 +126,7 @@ navbar = dbc.Navbar(
                 align="center",
                 no_gutters=True,
             ),
-            href="https://plot.ly",
+            href="https://github.com/aromatic-toast/IMDB_Sentiment_Analysis",
         )
     ],
     color="dark",
@@ -154,56 +134,44 @@ navbar = dbc.Navbar(
     id='nav-bar'
 )
 
-intro_tooltip = dbc.Tooltip(
-    # dcc.Markdown(markdown_text1),
-    markdown_text1,
-    target='nav-bar',
-    placement='bottom'
-)
+intro_popover = html.Div([
+    dbc.Button("Click for Info",
+               id="popover-target",
+               color="primary",
+               outline=True),
+    dbc.Popover(
+        [
+            dbc.PopoverHeader("Introduction"),
+            dbc.PopoverBody(dcc.Markdown(app_intro)),
+        ],
+        id="popover",
+        is_open=False,
+        target="popover-target"
+    )
+])
 
-tab1_tooltip = dbc.Tooltip(
+review_text_tooltip = dbc.Tooltip(
     markdown_text2,
-    target='tab1',
-    placement='bottom'
+    target='text-dropdown',
+    placement='right'
 )
 
-# external_stylesheets = [dbc.themes.CERULEAN]
+############---------------BUILD THE DASH APP-----------####################
 app = JupyterDash(__name__, external_stylesheets=[dbc.themes.CYBORG])
 
 # Create server variable with Flask server object for use with gunicorn
 server = app.server
 
 app.layout = html.Div(children=[navbar,
-                                # html.H3(children='Exploratory Text Analysis'),
-                                intro_tooltip,
+                                dbc.Row(html.Br()),
+                                intro_popover,
+                                dbc.Row(html.Br()),
 
                                 # 3 main tabs
                                 dcc.Tabs([
-                                    # tab to text documents
-                                    dcc.Tab(id='tab1', label='Read Movie Reviews', children=[
-                                        dbc.Row(html.Br()),
-                                        tab1_tooltip,
-                                        # dbc.Row(dbc.Col([html.H6(markdown_text2)], width=4)),
-                                        dbc.Row(html.Br()),
-                                        dbc.Row(dbc.Col([
-                                            html.Label("Enter an integer below:")
-                                        ])),
-                                        dbc.Row(dbc.Col([
-                                            dcc.Input(id='sample-review',
-                                                      value=0,
-                                                      placeholder='Input Review Number',
-                                                      type='number')], width=4)),
-                                        dbc.Row(html.Br()),
-                                        dbc.Row(dbc.Col([
-                                            dbc.Tabs([
-                                                dbc.Tab(id='tab1_content', label='Positive'),
-                                                dbc.Tab(id='tab2_content', label='Negative')
-                                            ])
-                                        ]))
-                                    ]),
 
                                     # tab to hold the summary plots
-                                    dcc.Tab(label='Plots', children=[
+                                    dcc.Tab(id='tab1', label='Plots', children=[
                                         dbc.Container([
                                             dbc.Row(html.Br()),
                                             dbc.Row([dbc.Col(dcc.Graph(id='plot1', figure=plot1)),
@@ -232,8 +200,36 @@ app.layout = html.Div(children=[navbar,
                                             fluid=True)
                                     ]),
 
-                                    # tab to contain a map
-                                    dcc.Tab(label='Wordcloud', children=[
+                                    # tab to text documents
+                                    dcc.Tab(id='tab2', label='Read Movie Reviews', children=[
+                                        dbc.Row(html.Br()),
+                                        review_text_tooltip,
+                                        # dbc.Row(dbc.Col([html.H6(markdown_text2)], width=4)),
+                                        dbc.Row(html.Br()),
+                                        dbc.Row(dbc.Col([
+                                            dcc.Dropdown(
+                                                id="text-dropdown",
+                                                options=[
+                                                    {"label": "Review 0", "value": 0},
+                                                    {"label": "Review 1", "value": 1},
+                                                    {"label": "Review 2", "value": 2},
+                                                ],
+                                                placeholder='Select Document',
+                                                value=0,
+                                            )
+
+                                        ], width=2), ),
+
+                                        dbc.Row(html.Br()),
+                                        dbc.Row([
+                                            dbc.Col([dbc.Card(id='card1_content', color="primary", inverse=True)]),
+                                            dbc.Col([dbc.Card(id='card2_content', color="primary", inverse=True)])
+                                        ]
+                                        )
+                                    ]),
+
+                                    # tab to contain a wordcloud
+                                    dcc.Tab(id='tab3', label='Wordcloud', children=[
                                         dbc.Row(html.Br()),
                                         # dbc.Row(dbc.Col(html.H5("Some instructions on how to use the map. "))),
                                         dbc.Row(html.Br()),
@@ -282,29 +278,43 @@ def get_top_neg_words(n):
 
 
 @app.callback(
-    Output('tab1_content', component_property='children'),
-    Input('sample-review', component_property='value'))
+    Output('card1_content', component_property='children'),
+    Input('text-dropdown', component_property='value'))
 def get_pos_review(index):
-    tab1_content = dbc.Card(
+    card_content = [
+        dbc.CardHeader("Positive Reviews"),
         dbc.CardBody(
             # filter a document from the positive reviews
-            pos_rev[index]
-        ))
-    return tab1_content
+            children=[pos_rev[index]]
+        ),
+    ]
+    return card_content
 
 
 @app.callback(
-    Output('tab2_content', component_property='children'),
-    Input('sample-review', component_property='value'))
+    Output('card2_content', component_property='children'),
+    Input('text-dropdown', component_property='value'))
 def get_neg_review(index):
-    tab2_content = dbc.Card(
+    card_content = [
+        dbc.CardHeader("Negative Reviews"),
         dbc.CardBody(
-            # filter a document from the negative reviews
-            neg_rev[index]
-        ))
-    return tab2_content
+            # filter a document from the positive reviews
+            children=[neg_rev[index]]
+        ),
+    ]
+    return card_content
+
+
+@app.callback(
+    Output("popover", "is_open"),
+    [Input("popover-target", "n_clicks")],
+    [State("popover", "is_open")],
+)
+def toggle_popover(n, is_open):
+    if n:
+        return not is_open
+    return is_open
 
 
 if __name__ == '__main__':
     app.run_server(debug=True)
-
