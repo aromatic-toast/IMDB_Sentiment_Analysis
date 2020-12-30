@@ -59,7 +59,7 @@ negative_bow = np.concatenate(train_clean_neg)
 
 
 # how many positive/negative reviews are there?
-df = (train.groupby(by='label')
+df = (train_clean.groupby(by='label')
           .count()
           .reset_index()
           .rename(columns={'text':'count'}))
