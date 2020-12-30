@@ -30,7 +30,7 @@ def make_top_n(df, n, polarity):
     return plot
 
 # load data
-train = pd.read_parquet("data/Train.parquet")
+train = pd.read_parquet("data/Train_subset.parquet")
 # replace 0/1s with human readable labels
 train = train.replace({'label':{0:'negative',
                                 1: 'positive'}})
